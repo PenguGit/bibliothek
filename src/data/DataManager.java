@@ -1,7 +1,7 @@
 package data;
 
+import java.lang.reflect.Constructor;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -119,6 +119,27 @@ public class DataManager implements Constants {
 		}
 	}
 	
+	public <T extends DataAccesObject> T loadById(int id, Class<T> clazz) {
+        try {
+            // Derive table name from the class name
+            String tableName = clazz.getSimpleName().toLowerCase(); 
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id);
+
+            if (rs.next()) {
+                // Use reflection to create an instance of the class
+                Constructor<T> constructor = clazz.getDeclaredConstructor(ResultSet.class);
+                return constructor.newInstance(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("SQL error: " + e.getMessage());
+        } catch (ReflectiveOperationException e) {
+            System.err.println("Reflection error: " + e.getMessage());
+        }
+        return null;
+    }
+	
+	
 	public Gender loadGenderbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -170,6 +191,7 @@ public class DataManager implements Constants {
 				g = loadGenderbyID(gender_id);
 				adr = loadAdressebyID(adresse_id);
 				pers = new Person(name, vname, gebdat, g, adr);
+				pers.setId(id);
 			}
 			return pers;
 		} catch (SQLException e) {

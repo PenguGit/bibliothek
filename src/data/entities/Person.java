@@ -1,7 +1,11 @@
 package data.entities;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
+
+import data.DataManager;
 
 /**
  * Repräsentiert die Entität Person
@@ -17,6 +21,25 @@ public class Person extends DataAccesObject {
 	private Gender gender;
 	private Adresse adresse;
 	
+	
+	/**
+	 * Konstruktor für generische LoadbyID methode
+	 * @param rs
+	 * @throws SQLException
+	 */
+	public Person(ResultSet rs) throws SQLException {
+        this.name = rs.getString("name");
+        this.vorname = rs.getString("vorname");
+        this.gebdat = rs.getDate("geburtsdatum").toLocalDate();
+        int genderId = rs.getInt("gender_id");
+        int adresseId = rs.getInt("adresse_id");
+
+        // Use DataManager to load related objects
+        DataManager dm = DataManager.getInstance();
+        this.gender = dm.loadById(genderId, Gender.class);
+        this.adresse = dm.loadById(adresseId, Adresse.class);
+    }
+
 	/**
 	 * Konstruiert eine Instanz der Klasse und
 	 * Initialisiert die Felder name, vorname und gebdat.

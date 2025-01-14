@@ -1,5 +1,8 @@
 package data.entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Die Klasse repräsentiert die Entität Adresse (DB-Tabelle).
  * Die Felder der Klasse entsprechen den Attributen der Entität (Spalten).
@@ -14,6 +17,19 @@ public class Adresse extends DataAccesObject{
 	private String stadt;
 	private String strasse;
 	private String hausnr;
+	
+	/**
+	 * Konstruktor für Generische Tabellenfunktion
+	 * @param rs
+	 * @throws SQLException
+	 */
+	public Adresse(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.plz = rs.getInt("plz");
+        this.strasse = rs.getString("strasse");
+        this.hausnr = rs.getString("hausnr");
+        this.stadt = rs.getString("stadt");
+    }
 	
 	/**
 	 * Konstruiert eine Instanz der Klasse. 

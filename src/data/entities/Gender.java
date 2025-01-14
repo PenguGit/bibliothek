@@ -1,5 +1,8 @@
 package data.entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Beschreibt die Tabelle Gender
  */
@@ -11,8 +14,19 @@ public class Gender extends DataAccesObject {
 	private String info;
 
 	/**
-	 * Konstruiert eine Instanz
-	 * Initialisiert die Felder kuerzel und info
+	 * Konstruktor für generische LoadbyID Funktion
+	 * 
+	 * @param rs
+	 * @throws SQLException
+	 */
+	public Gender(ResultSet rs) throws SQLException {
+		this.kuerzel = rs.getString("kuerzel");
+		this.info = rs.getString("info");
+	}
+
+	/**
+	 * Konstruiert eine Instanz Initialisiert die Felder kuerzel und info
+	 * 
 	 * @param kuerzel
 	 * @param info
 	 */
@@ -21,9 +35,11 @@ public class Gender extends DataAccesObject {
 		this.kuerzel = kuerzel;
 		this.info = info;
 	}
+
 	/**
-	 * Konstruiert eine Instanz (Beim einlesen)
-	 * Initialisiert die Felder kuerzel und info und ID
+	 * Konstruiert eine Instanz (Beim einlesen) Initialisiert die Felder kuerzel und
+	 * info und ID
+	 * 
 	 * @param kuerzel
 	 * @param info
 	 */
@@ -33,8 +49,7 @@ public class Gender extends DataAccesObject {
 		this.kuerzel = kuerzel;
 		this.info = info;
 	}
-	
-	
+
 	@Override
 	public String getSqlString() {
 		if (id > 0) {
@@ -59,7 +74,5 @@ public class Gender extends DataAccesObject {
 	public void setInfo(String info) {
 		this.info = info;
 	}
-
-
 
 }
