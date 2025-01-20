@@ -10,8 +10,8 @@ public class BibFrame extends JFrame implements GUIConstants {
 		setBounds(FRAME_BOUNDS);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		BibPanel bP = new BibPanel(); // Eine Fläche mit Tabs
-		bP.setVisible(true);
+		PersonPanel pP = new PersonPanel(); // Eine Fläche mit Tabs
+		add(pP);
 		setVisible(true); // immer als letzte Zeile
 	}
 
