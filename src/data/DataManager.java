@@ -3,6 +3,7 @@ package data;
 import java.lang.reflect.Constructor;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import data.entities.Adresse;
-import data.entities.DataAccesObject;
+import data.entities.DataAccessObject;
 import data.entities.Gender;
 import data.entities.Person;
 
@@ -24,8 +25,8 @@ public class DataManager implements Constants {
 	public static final String PASSWORD = "";
 
 	private static DataManager instance; // Klassenvariable
-	private Connection connection; 
-	
+	private Connection connection;
+
 	/**
 	 * private, weil singleton
 	 */
@@ -40,19 +41,18 @@ public class DataManager implements Constants {
 			try {
 				instance.connection = DriverManager.getConnection(URL, USER, PASSWORD);
 				Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-	                try {
-	                    if (instance.connection != null && !instance.connection.isClosed()) {
-	                        instance.connection.close();
-	                        System.out.println("Connection closed.");
-	                    }
-	                } catch (SQLException e) {
-	                    e.printStackTrace();
-	                }
-	            }));
+					try {
+						if (instance.connection != null && !instance.connection.isClosed()) {
+							instance.connection.close();
+							System.out.println("Connection closed.");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}));
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		return instance;
 	}
@@ -62,14 +62,14 @@ public class DataManager implements Constants {
 	 * 
 	 * @param dao
 	 */
-	public void save(DataAccesObject dao) {
+	public void save(DataAccessObject dao) {
 		try {
 			// Open Connection to Database
 			// create a statement
 			Statement stmt = connection.createStatement();
 			// execute statement
 			String sql = dao.getSqlString();
-			//System.out.println(sql);
+			// System.out.println(sql);
 			stmt.execute(sql, Statement.RETURN_GENERATED_KEYS);
 			ResultSet result = stmt.getGeneratedKeys();
 
@@ -99,7 +99,7 @@ public class DataManager implements Constants {
 		}
 
 	}
-	
+
 	public ArrayList<Adresse> getAllAdressen() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -118,28 +118,28 @@ public class DataManager implements Constants {
 			return null;
 		}
 	}
-	
-	public <T extends DataAccesObject> T loadById(int id, Class<T> clazz) {
-        try {
-            // Derive table name from the class name
-            String tableName = clazz.getSimpleName().toLowerCase(); 
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName + " WHERE id = " + id);
 
-            if (rs.next()) {
-                // Use reflection to create an instance of the class
-                Constructor<T> constructor = clazz.getDeclaredConstructor(ResultSet.class);
-                return constructor.newInstance(rs);
-            }
-        } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
-        } catch (ReflectiveOperationException e) {
-            System.err.println("Reflection error: " + e.getMessage());
-        }
-        return null;
-    }
-	
-	
+	public <T extends DataAccessObject> T loadById(int id, Class<T> clazz) {
+		// Derive table name from the class name
+		String tableName = clazz.getSimpleName().toLowerCase();
+		String query = "SELECT * FROM " + tableName + " WHERE id = ?";
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setInt(1, id);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					// Use reflection to create an instance of the class
+					Constructor<T> constructor = clazz.getDeclaredConstructor(ResultSet.class);
+					return constructor.newInstance(rs);
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("SQL error: " + e.getMessage());
+		} catch (ReflectiveOperationException e) {
+			System.err.println("Reflection error: " + e.getMessage());
+		}
+		return null;
+	}
+
 	public Gender loadGenderbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -156,7 +156,7 @@ public class DataManager implements Constants {
 		}
 
 	}
-	
+
 	public Adresse loadAdressebyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -174,7 +174,7 @@ public class DataManager implements Constants {
 			return null;
 		}
 	}
-	
+
 	public Person loadPersonbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -216,7 +216,7 @@ public class DataManager implements Constants {
 //		}
 //
 //	}
-
+	
 	public ResultSet executeQuery(String sqlQuery) {
 		Connection connection = null;
 		try {

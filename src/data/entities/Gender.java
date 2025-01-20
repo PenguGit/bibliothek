@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Beschreibt die Tabelle Gender
  */
-public class Gender extends DataAccesObject {
+public class Gender extends DataAccessObject {
 
 	private final String SQL_INSERT = "INSERT INTO GENDER (KUERZEL, INFO) VALUES('%s', '%s')";
 	private final String SQL_UPDATE = "UPDATE gender set kuerzel = '%s', info = '%s' WHERE id = %d;";

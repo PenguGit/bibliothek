@@ -10,7 +10,7 @@ import data.DataManager;
 /**
  * Repräsentiert die Entität Person
  */
-public class Person extends DataAccesObject {
+public class Person extends DataAccessObject {
 
 	private final String SQL_INSERT = "INSERT INTO Person (geburtsdatum, name, vorname,  Adresse_id, Gender_id) VALUES('%s', '%s', '%s', '%s', '%s')";
 	private final String SQL_UPDATE = "UPDATE Person set geburtsdatum = '%s', name = '%s', vorname = '%s', Adresse_id = '%s', Gender_id = '%s' WHERE id = %d;";

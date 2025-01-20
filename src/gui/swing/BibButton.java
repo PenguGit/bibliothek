@@ -1,0 +1,17 @@
+package gui.swing;
+
+import javax.swing.JButton;
+
+@SuppressWarnings("serial")
+public class BibButton extends JButton implements GUIConstants {
+	
+	public BibButton() {
+		super("Click me");
+		setFont(FONT_BUTTON);
+	}
+	
+	public BibButton(String string) {
+		this();
+		setText(string);
+	}
+}

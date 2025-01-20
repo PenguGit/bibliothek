@@ -8,10 +8,10 @@ import java.sql.SQLException;
  * Die Felder der Klasse entsprechen den Attributen der Entität (Spalten).
  * Einer Instanz der Klasse entspricht ein Datensatz in der DB-Tabelle.
  */
-public class Adresse extends DataAccesObject{
+public class Adresse extends DataAccessObject{
  
 	private final String SQL_INSERT = "INSERT INTO ADRESSE (plz, stadt, strasse, hausnr) VALUES(%d, '%s', '%s', '%s')";
-	private final String SQL_UPDATE = "UPDATE adresse set plz = %d, stadt = '%s', strasse = '%s', hausnr = '%s' WHERE id = %d;";
+	//private final String SQL_UPDATE = "UPDATE adresse set plz = %d, stadt = '%s', strasse = '%s', hausnr = '%s' WHERE id = %d;";
 	
 	private int plz;
 	private String stadt;
@@ -59,7 +59,7 @@ public class Adresse extends DataAccesObject{
 	@Override
 	public String getSqlString() {
 		if (id > 0) {
-			return SQL_UPDATE.formatted(plz, stadt, strasse, hausnr, id);
+			return SQL_INSERT.formatted(plz, stadt, strasse, hausnr, id);
 		} else {
 			return SQL_INSERT.formatted(plz, stadt, strasse, hausnr);
 		}

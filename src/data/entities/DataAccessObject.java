@@ -5,7 +5,7 @@ import data.DataManager;
 /**
  * Mutterklasse aller Entitätsklassen
  */
-public abstract class DataAccesObject {
+public abstract class DataAccessObject {	
 	private final String SQL_QUERY = "Select * from '%s';";
 	protected int id;
 	
