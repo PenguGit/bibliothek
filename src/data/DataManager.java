@@ -16,24 +16,34 @@ import data.entities.Gender;
 import data.entities.Person;
 
 /**
- * Ich verstehe die Klasse so....
+ * Class that manages the Data of the DB
  */
 public class DataManager implements Constants {
-
+	
+	/**
+	 * Connection Constants for the DB
+	 */
 	public static final String URL = "jdbc:mysql://localhost:3306/pers";
 	public static final String USER = "root";
 	public static final String PASSWORD = "";
-
-	private static DataManager instance; // Klassenvariable
+	
+	/**
+	 * Singleton to ensure only one DBManager uses the DB
+	 * with one Connection
+	 */
+	private static DataManager instance;
 	private Connection connection;
 
 	/**
-	 * private, weil singleton
+	 * private due singleton
 	 */
 	private DataManager() {
 		super();
 	}
-
+	
+	/**
+	 * @return the Instance of the DBManager
+	 */
 	public static DataManager getInstance() {
 
 		if (instance == null) {
@@ -58,7 +68,7 @@ public class DataManager implements Constants {
 	}
 
 	/**
-	 * Speichert eine Instanz der Klasse Gender in die DB
+	 * Saves the data to the Database of any Table
 	 * 
 	 * @param dao
 	 */
@@ -82,6 +92,10 @@ public class DataManager implements Constants {
 		}
 	}
 
+	/**
+	 * Read out all entries in the table Gender and save them
+	 * @return an ArrayList of all items in the Table gender
+	 */
 	public ArrayList<Gender> getAllGenders() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -99,7 +113,11 @@ public class DataManager implements Constants {
 		}
 
 	}
-
+	
+	/**
+	 * Read out all entries in the table Adressen and save them
+	 * @return an ArrayList of all items in the Table Adressen
+	 */
 	public ArrayList<Adresse> getAllAdressen() {
 		try {
 			Statement stmt = connection.createStatement();
@@ -118,7 +136,15 @@ public class DataManager implements Constants {
 			return null;
 		}
 	}
-
+	
+	
+	/**
+	 * Load any single item by the ID and the class given. Generic method
+	 * @param <T> T being a class that is generic of the type DataAccessObject
+	 * @param id 
+	 * @param clazz classname
+	 * @return return the Object of the classtype given by clazz
+	 */
 	public <T extends DataAccessObject> T loadById(int id, Class<T> clazz) {
 		// Derive table name from the class name
 		String tableName = clazz.getSimpleName().toLowerCase();
@@ -139,7 +165,13 @@ public class DataManager implements Constants {
 		}
 		return null;
 	}
-
+	
+	
+	/**
+	 * Load any single entry in the table Gender based on the param id given
+	 * @param id
+	 * @return
+	 */
 	public Gender loadGenderbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -156,7 +188,12 @@ public class DataManager implements Constants {
 		}
 
 	}
-
+	
+	/**
+	 * Load any single entry in the table Adresse based on the param id given
+	 * @param id
+	 * @return
+	 */
 	public Adresse loadAdressebyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -174,7 +211,12 @@ public class DataManager implements Constants {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Load any single entry in the table Persn based on the param id given
+	 * @param id
+	 * @return
+	 */
 	public Person loadPersonbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
@@ -217,6 +259,11 @@ public class DataManager implements Constants {
 //
 //	}
 	
+	/**
+	 * Execute a Query based on the string passed and return the resultset if everything worked
+	 * @param sqlQuery
+	 * @return
+	 */
 	public ResultSet executeQuery(String sqlQuery) {
 		Connection connection = null;
 		try {
@@ -241,10 +288,10 @@ public class DataManager implements Constants {
 	}
 
 	/**
-	 * Setzt ein SQL-Statement ab
+	 * Executes a SQL statement
 	 * 
 	 * @param sqlStatement
-	 * @return Meldung, falls ein Fehler aufgetreten ist, sonst null
+	 * @return Error if it happens else return null
 	 * @throws SQLException
 	 */
 	public String executeSQL(String sqlStatement) {

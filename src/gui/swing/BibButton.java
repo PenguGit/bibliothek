@@ -2,7 +2,6 @@ package gui.swing;
 
 import javax.swing.JButton;
 
-@SuppressWarnings("serial")
 public class BibButton extends JButton implements GUIConstants {
 	
 	public BibButton() {
