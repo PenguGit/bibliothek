@@ -1,7 +1,5 @@
 package data.entities;
 
-import data.DataManager;
-
 /**
  * Mutterklasse aller Entitätsklassen
  */
@@ -14,10 +12,6 @@ public abstract class DataAccessObject {
 	}
 
 	public abstract String getSqlString();
-
-	public void save() {
-		DataManager.getInstance().save(this);
-	}
 
 	public int getId() {
 		return id;

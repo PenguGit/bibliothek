@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.entities.DataAdresse;
+import data.entities.DataGender;
+import data.entities.DataPerson;
 import data.fake.FakeDataGeneration;
 
 class TestLoadAllGender {
@@ -25,7 +25,7 @@ class TestLoadAllGender {
 	@Test
 	void testLoadOne() {
 		DataManager dm = DataManager.getInstance();
-		Person pers = dm.loadPersonbyID(2);
+		DataPerson pers = dm.loadPersonbyID(2);
 		System.out.println(pers.getGebdat().toString());
 		assertNotNull(pers);
 	}
@@ -33,7 +33,7 @@ class TestLoadAllGender {
 	@Test
 	void testPers() {
 		DataManager dm = DataManager.getInstance();
-		Person pers = dm.loadById(2, Person.class);
+		DataPerson pers = dm.loadById(2, DataPerson.class);
 		System.out.println(pers.getGebdat().toString());
 		assertNotNull(pers);
 	}
@@ -41,7 +41,7 @@ class TestLoadAllGender {
 	@Test
 	void testAdr() {
 		DataManager dm = DataManager.getInstance();
-		Adresse adr = dm.loadById(2, Adresse.class);
+		DataAdresse adr = dm.loadById(2, DataAdresse.class);
 		System.out.println(adr.getPlz());
 		assertNotNull(adr);
 	}
@@ -49,7 +49,7 @@ class TestLoadAllGender {
 	@Test
 	void testGen() {
 		DataManager dm = DataManager.getInstance();
-		Gender g = dm.loadById(2, Gender.class);
+		DataGender g = dm.loadById(2, DataGender.class);
 		System.out.println(g.getInfo());
 		assertNotNull(g);
 	}

@@ -8,7 +8,7 @@ import java.sql.SQLException;
  * Die Felder der Klasse entsprechen den Attributen der Entität (Spalten).
  * Einer Instanz der Klasse entspricht ein Datensatz in der DB-Tabelle.
  */
-public class Adresse extends DataAccessObject{
+public class DataAdresse extends DataAccessObject{
  
 	private final String SQL_INSERT = "INSERT INTO ADRESSE (plz, stadt, strasse, hausnr) VALUES(%d, '%s', '%s', '%s')";
 	//private final String SQL_UPDATE = "UPDATE adresse set plz = %d, stadt = '%s', strasse = '%s', hausnr = '%s' WHERE id = %d;";
@@ -23,7 +23,7 @@ public class Adresse extends DataAccessObject{
 	 * @param rs
 	 * @throws SQLException
 	 */
-	public Adresse(ResultSet rs) throws SQLException {
+	public DataAdresse(ResultSet rs) throws SQLException {
         this.id = rs.getInt("id");
         this.plz = rs.getInt("plz");
         this.strasse = rs.getString("strasse");
@@ -39,7 +39,7 @@ public class Adresse extends DataAccessObject{
 	 * @param strasse
 	 * @param haus
 	 */
-	public Adresse(int plz, String stadt, String strasse, String haus) {
+	public DataAdresse(int plz, String stadt, String strasse, String haus) {
 		super();
 		this.plz = plz;
 		this.stadt = stadt;
@@ -47,7 +47,7 @@ public class Adresse extends DataAccessObject{
 		this.hausnr = haus;
 	}
 	
-	public Adresse(int id, int plz, String stadt, String strasse, String haus) {
+	public DataAdresse(int id, int plz, String stadt, String strasse, String haus) {
 		super();
 		this.id = id;
 		this.plz = plz;

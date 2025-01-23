@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.Gender;
+import data.entities.DataGender;
 
 class TestGenderTest {
 	static final String DELETE_ALL_GENDER = "delete from gender;";
@@ -23,10 +23,10 @@ class TestGenderTest {
 
 	@Test
 	void test() {
-		Gender g = new Gender("G1", "Gender 1");
+		DataGender g = new DataGender("G1", "Gender 1");
 		assertEquals(0, g.getId());
 		
-		g.save();
+		DataManager.getInstance().save(g);
 		assertEquals(1, g.getId());
 	}
 

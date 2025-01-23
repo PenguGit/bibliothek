@@ -6,9 +6,9 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import data.DataManager;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.entities.DataAdresse;
+import data.entities.DataGender;
+import data.entities.DataPerson;
 
 public class FakeDataGeneration {
 	static final String DELETE_ALL = "delete from %s;";
@@ -26,10 +26,10 @@ public class FakeDataGeneration {
 
 	public static void createFakeGender() {
 		deleteAny("Gender");
-		Gender g;
+		DataGender g;
 		for (int i = 1; i < 6; i++) {
-			g = new Gender("G" + i, "Gender " + i);
-			g.save();
+			g = new DataGender("G" + i, "Gender " + i);
+			dm.save(g);
 		}
 	}
 
@@ -51,31 +51,31 @@ public class FakeDataGeneration {
 		deleteAny("person");
 		createFakeGender();
 		createFakeAdresse();
-		ArrayList<Gender> genders = dm.getAllGenders();
-		ArrayList<Adresse> adressen = dm.getAllAdressen();
+		ArrayList<DataGender> genders = dm.getAllGenders();
+		ArrayList<DataAdresse> adressen = dm.getAllAdressen();
 		Random rand = new Random();
 		int anzahlGender = genders.size();
 		int anzahlAdresse = adressen.size();
-		Person p;
-		Gender g;
-		Adresse adr;
+		DataPerson p;
+		DataGender g;
+		DataAdresse adr;
 		for (int i = 0; i < anzahlAdresse; i++) {
 			int index = rand.nextInt(anzahlGender);
 			g = genders.get(index);
 			adr = adressen.get(i);
 			LocalDate date = makeRandomDate();
-			p = new Person("Name" + i, "Vorname" + i, date , g, adr);
-			p.save();
+			p = new DataPerson("Name" + i, "Vorname" + i, date , g, adr);
+			dm.save(p);
 		}
 	}
 
 	public static void createFakeAdresse() {
 		deleteAny("adresse");
 		Random rand = new Random();
-		Adresse adr;
+		DataAdresse adr;
 		for (int i = 1; i < 6; i++) {
-			adr = new Adresse(i + rand.nextInt(99990), "Stadt." + i, "Strasse" + i, "HausNr" + i);
-			adr.save();
+			adr = new DataAdresse(i + rand.nextInt(99990), "Stadt." + i, "Strasse" + i, "HausNr" + i);
+			dm.save(adr);
 		}
 	}
 

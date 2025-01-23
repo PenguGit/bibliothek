@@ -27,9 +27,9 @@ public class PersonPanel extends BibPanel {
 		BibTextField txtName = new BibTextField(10);
 		BibTextField txtVorname = new BibTextField(10);
 		BibTextField txtGeburtsdatum = new BibTextField(10);
-		BibTextField txtPLZ = new BibTextField(20);
-		BibTextField txtStadt = new BibTextField(20);
-		BibTextField txtStrasse = new BibTextField(20);
+		BibTextField txtPLZ = new BibTextField(10);
+		BibTextField txtStadt = new BibTextField(10);
+		BibTextField txtStrasse = new BibTextField(10);
 		BibTextField txtHausnummer = new BibTextField(10);
 		
 		BibRadioButton rbW = new BibRadioButton("W");
