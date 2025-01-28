@@ -1,158 +1,133 @@
 package gui.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 
+import bl.DTOManager;
+import bl.Gender;
+
 public class PersonPanel extends BibPanel {
 
+	DTOManager dtoMan;
+	GridBagConstraints gbc;
+	
+	private BibTextField txtName;
+	private BibTextField txtVorname;
+	private BibTextField txtGeburtsdatum;
+	private BibTextField txtPLZ;
+	private BibTextField txtStadt;
+	private BibTextField txtStrasse;
+	private BibTextField txtHausnummer;
+
+	/**
+	 * Builds everything
+	 */
 	public PersonPanel() {
+		dtoMan = new DTOManager();
+		ArrayList<Gender> gList = dtoMan.loadAllGender();
+
 		setLayout(new GridBagLayout());
 		setBackground(Color.DARK_GRAY);
+		
+		 gbc = new GridBagConstraints();
+		 gbc.insets = new Insets(5, 5, 5, 5);
 
 		// Components
 		BibLabel lblName = new BibLabel("Name");
+		txtName = new BibTextField(10);
+		addComponent(lblName, 0, 0, 0.2);
+        addComponent(txtName, 0, 1, 0.8);
+
 		BibLabel lblVorname = new BibLabel("Vorname");
+		txtVorname = new BibTextField(10);
+		addComponent(lblVorname, 1, 0, 0.2);
+        addComponent(txtVorname, 1, 1, 0.8);
+
 		BibLabel lblGeburtsdatum = new BibLabel("Geburtsdatum");
+		txtGeburtsdatum = new BibTextField(10);
+		addComponent(lblGeburtsdatum, 2, 0, 0.2);
+        addComponent(txtGeburtsdatum, 2, 1, 0.8);
+
 		BibLabel lblGeschlecht = new BibLabel("Geschlecht");
+
 		BibLabel lblPLZ = new BibLabel("PLZ");
+		txtPLZ = new BibTextField(10);
+		addComponent(lblPLZ, 0, 2, 0.2);
+        addComponent(txtPLZ, 0, 3, 0.8);
+
 		BibLabel lblStadt = new BibLabel("Stadt");
+		txtStadt = new BibTextField(10);
+		addComponent(lblStadt, 1, 2, 0.2);
+        addComponent(txtStadt, 1, 3, 0.8);
+
 		BibLabel lblStrasse = new BibLabel("Straße");
+		txtStrasse = new BibTextField(10);
+		addComponent(lblStrasse, 2, 2, 0.2);
+        addComponent(txtStrasse, 2, 3, 0.8);
+
 		BibLabel lblHausnummer = new BibLabel("HausNr.");
-		
-		BibTextField txtName = new BibTextField(10);
-		BibTextField txtVorname = new BibTextField(10);
-		BibTextField txtGeburtsdatum = new BibTextField(10);
-		BibTextField txtPLZ = new BibTextField(10);
-		BibTextField txtStadt = new BibTextField(10);
-		BibTextField txtStrasse = new BibTextField(10);
-		BibTextField txtHausnummer = new BibTextField(10);
-		
-		BibRadioButton rbW = new BibRadioButton("W");
-		BibRadioButton rbM = new BibRadioButton("M");
-		BibRadioButton rbD = new BibRadioButton("D");
+		txtHausnummer = new BibTextField(10);
+		addComponent(lblHausnummer, 3, 0, 0.2);
+        addComponent(txtHausnummer, 3, 1, 0.8);
+        
+        
+        //TODO Methode fuer Radiobuttons generieren
 		ButtonGroup genderGroup = new ButtonGroup();
-		
-		BibButton btnSpeichern = new BibButton("Speichern");
-		
-		
-		// Gender Radio Buttons Panel
-		BibPanel genderPanel = new BibPanel(new FlowLayout(FlowLayout.LEFT, 1, 0)); // 5px horizontal gap, 0px vertical gap
+		BibPanel genderPanel = new BibPanel(new FlowLayout(FlowLayout.LEFT, 1, 0)); // 5px horizontal gap, 0px vertical
+																					// gap
 		genderPanel.setBackground(Color.DARK_GRAY); // Match the background color
-		genderPanel.add(rbW);
-		genderPanel.add(rbM);
-		genderPanel.add(rbD);
-
-		rbW.setBackground(getBackground());
-		rbM.setBackground(getBackground());
-		rbD.setBackground(getBackground());
-		
-		genderGroup.add(rbW);
-		genderGroup.add(rbM);
-		genderGroup.add(rbD);
-		
-		// Set font and color
 		Color fontColor = Color.WHITE;
-		lblName.setForeground(fontColor);
-		lblVorname.setForeground(fontColor);
-		lblGeburtsdatum.setForeground(fontColor);
-		lblGeschlecht.setForeground(fontColor);
-		lblPLZ.setForeground(fontColor);
-		lblStadt.setForeground(fontColor);
-		lblStrasse.setForeground(fontColor);
-		lblHausnummer.setForeground(fontColor);
-		rbW.setForeground(fontColor);
-		rbM.setForeground(fontColor);
-		rbD.setForeground(fontColor);
+		for (Gender g : gList) {
+			BibRadioButton rbG = new BibRadioButton(g);
+			rbG.setToolTipText(g.getInfo());
+			rbG.setBackground(getBackground());
+			rbG.setForeground(fontColor);
+			genderGroup.add(rbG);
+			genderPanel.add(rbG);
+		}
+		addComponent(lblGeschlecht, 3, 2, 0.2);
+        addComponent(genderPanel, 3, 3, 0.8);
+        
+		BibButton btnSpeichern = new BibButton("Speichern");
 
-		// Layout manager
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5); // Spacing
-
-		// Row 1
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 0.2;
-		add(lblName, gbc);
-
-		gbc.gridx = 1;
-		gbc.weightx = 0.8;
-		add(txtName, gbc);
-
-		gbc.gridx = 2;
-		gbc.weightx = 0.2;
-		add(lblPLZ, gbc);
-
-		gbc.gridx = 3;
-		gbc.weightx = 0.8;
-		add(txtPLZ, gbc);
-
-		// Row 2
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weightx = 0.2;
-		add(lblVorname, gbc);
-
-		gbc.gridx = 1;
-		gbc.weightx = 0.8;
-		add(txtVorname, gbc);
-
-		gbc.gridx = 2;
-		gbc.weightx = 0.2;
-		add(lblStadt, gbc);
-
-		gbc.gridx = 3;
-		gbc.weightx = 0.8;
-		add(txtStadt, gbc);
-
-		// Row 3
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.weightx = 0.2;
-		add(lblGeburtsdatum, gbc);
-
-		gbc.gridx = 1;
-		gbc.weightx = 0.8;
-		add(txtGeburtsdatum, gbc);
-
-		gbc.gridx = 2;
-		gbc.weightx = 0.2;
-		add(lblStrasse, gbc);
-
-		gbc.gridx = 3;
-		gbc.weightx = 0.8;
-		add(txtStrasse, gbc);
-
-		// Row 4
-		gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 0.2;
-        add(lblHausnummer, gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 0.8;
-        add(txtHausnummer, gbc);
-
-        gbc.gridx = 2;
-        gbc.weightx = 0.2;
-        add(lblGeschlecht, gbc);
-
-		gbc.gridx = 3;
-		gbc.weightx = 0.8;
-		add(genderPanel, gbc);
-
-		// Row 6 (Button)
-		gbc.gridx = 3;
-		gbc.gridy = 5;
-		gbc.weightx = 0.8;
-		btnSpeichern.setBackground(Color.GREEN);
-		btnSpeichern.setForeground(Color.WHITE);
-		gbc.anchor = GridBagConstraints.CENTER;
-		add(btnSpeichern, gbc);
+        setLabelColor(fontColor, lblName, lblVorname, lblGeburtsdatum, lblGeschlecht, lblPLZ, lblStadt, lblStrasse, lblHausnummer);
+        btnSpeichern.setBackground(Color.GREEN);
+        btnSpeichern.setForeground(Color.WHITE);
+        gbc.anchor = GridBagConstraints.CENTER;
+        addComponent(btnSpeichern, 4, 3, 0.8);
 	}
+	
+	/**
+	 * Sets all fonts for labels
+	 * @param fontColor
+	 * @param labels
+	 */
+	//TODO remove this and add motherclass BibPersonLabel
+	private void setLabelColor(Color fontColor, BibLabel... labels) {
+        for (BibLabel label : labels) {
+            label.setForeground(fontColor);
+        }
+    }
+	
+	/**
+	 * Just add components with constraints
+	 * @param component
+	 * @param row
+	 * @param col
+	 * @param weightx
+	 */
+	private void addComponent(Component component, int row, int col, double weightx) {
+        gbc.gridy = row;
+        gbc.gridx = col;
+        gbc.weightx = weightx;
+        add(component, gbc);
+    }
 
 }

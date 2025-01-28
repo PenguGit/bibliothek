@@ -10,8 +10,9 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import data.entities.DataAdresse;
+import bl.Person;
 import data.entities.DataAccessObject;
+import data.entities.DataAdresse;
 import data.entities.DataGender;
 import data.entities.DataPerson;
 
@@ -84,12 +85,25 @@ public class DataManager implements Constants {
 		return null;
 	}
 
+	public String savePerson(DataPerson person) {
+		String err;
+		err = save(person.getAdresse());
+		if (err != null) {
+			return err;
+		}
+		err = save(person);
+		if (err != null) {
+			return err;
+		}
+		return null;
+	}
+	
 	/**
 	 * Saves the data to the Database of any Table
 	 * 
 	 * @param dao
 	 */
-	public void save(DataAccessObject dao) {
+	public String save(DataAccessObject dao) {
 		try {
 			// Open Connection to Database
 			// create a statement
@@ -106,7 +120,9 @@ public class DataManager implements Constants {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return e.getMessage();
 		}
+		return null;
 	}
 
 	/**
