@@ -5,7 +5,7 @@ package bl;
  * Die Felder der Klasse entsprechen den Attributen der Entität (Spalten).
  * Einer Instanz der Klasse entspricht ein Datensatz in der DB-Tabelle.
  */
-public class Adresse extends DataTransferObject{
+public class BLAdresse extends DataTransferObject{
  
 	private int plz;
 	private String stadt;
@@ -20,7 +20,7 @@ public class Adresse extends DataTransferObject{
 	 * @param strasse
 	 * @param haus
 	 */
-	public Adresse(int plz, String stadt, String strasse, String haus) {
+	public BLAdresse(int plz, String stadt, String strasse, String haus) {
 		super();
 		this.plz = plz;
 		this.stadt = stadt;
@@ -28,7 +28,7 @@ public class Adresse extends DataTransferObject{
 		this.hausnr = haus;
 	}
 	
-	public Adresse(int id, int plz, String stadt, String strasse, String haus) {
+	public BLAdresse(int id, int plz, String stadt, String strasse, String haus) {
 		super();
 		this.id = id;
 		this.plz = plz;

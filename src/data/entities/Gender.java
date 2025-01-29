@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Beschreibt die Tabelle Gender
  */
-public class DataGender extends DataAccessObject {
+public class Gender extends DataAccessObject {
 
 	private final String SQL_INSERT = "INSERT INTO GENDER (KUERZEL, INFO) VALUES('%s', '%s')";
 	private final String SQL_UPDATE = "UPDATE gender set kuerzel = '%s', info = '%s' WHERE id = %d;";
@@ -19,7 +19,8 @@ public class DataGender extends DataAccessObject {
 	 * @param rs
 	 * @throws SQLException
 	 */
-	public DataGender(ResultSet rs) throws SQLException {
+	public Gender(ResultSet rs) throws SQLException {
+		this.id = rs.getInt("id");
 		this.kuerzel = rs.getString("kuerzel");
 		this.info = rs.getString("info");
 	}
@@ -30,7 +31,7 @@ public class DataGender extends DataAccessObject {
 	 * @param kuerzel
 	 * @param info
 	 */
-	public DataGender(String kuerzel, String info) {
+	public Gender(String kuerzel, String info) {
 		super();
 		this.kuerzel = kuerzel;
 		this.info = info;
@@ -43,14 +44,14 @@ public class DataGender extends DataAccessObject {
 	 * @param kuerzel
 	 * @param info
 	 */
-	public DataGender(int id, String kuerzel, String info) {
+	public Gender(int id, String kuerzel, String info) {
 		super();
 		this.id = id;
 		this.kuerzel = kuerzel;
 		this.info = info;
 	}
 
-	public DataGender() {
+	public Gender() {
 		// TODO Auto-generated constructor stub
 	}
 

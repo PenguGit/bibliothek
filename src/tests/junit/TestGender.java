@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.DataGender;
+import data.entities.Gender;
 
 class TestGender {
 	static final String SQL_QUERY = "SELECT * FROM GENDER";
@@ -23,7 +23,7 @@ class TestGender {
 		dm.executeSQL(DELETE_ALL_GENDER);
 		dm.executeSQL(RESET_AI_GENDER);
 		
-		DataGender g = new DataGender("G1", "Gender 1");
+		Gender g = new Gender("G1", "Gender 1");
 		assertEquals(0, g.getId());
 		
 		dm.save(g);
@@ -32,7 +32,7 @@ class TestGender {
 	@Test
 	void test1() {
 		
-		DataGender g = new DataGender("G2", "Gender 2");
+		Gender g = new Gender("G2", "Gender 2");
 		DataManager.getInstance().save(g);
 		assertEquals(2, g.getId());
 	}

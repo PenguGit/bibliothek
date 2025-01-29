@@ -10,7 +10,7 @@ import data.DataManager;
 /**
  * Repräsentiert die Entität Person
  */
-public class DataPerson extends DataAccessObject {
+public class Person extends DataAccessObject {
 
 	private final String SQL_INSERT = "INSERT INTO Person (geburtsdatum, name, vorname,  Adresse_id, Gender_id) VALUES('%s', '%s', '%s', '%s', '%s')";
 	private final String SQL_UPDATE = "UPDATE Person set geburtsdatum = '%s', name = '%s', vorname = '%s', Adresse_id = '%s', Gender_id = '%s' WHERE id = %d;";
@@ -18,8 +18,8 @@ public class DataPerson extends DataAccessObject {
 	private String name;
 	private String vorname;
 	private LocalDate gebdat;
-	private DataGender gender;
-	private DataAdresse adresse;
+	private Gender gender;
+	private Adresse adresse;
 	
 	
 	/**
@@ -27,7 +27,8 @@ public class DataPerson extends DataAccessObject {
 	 * @param rs
 	 * @throws SQLException
 	 */
-	public DataPerson(ResultSet rs) throws SQLException {
+	public Person(ResultSet rs) throws SQLException {
+		this.id = rs.getInt("id");
         this.name = rs.getString("name");
         this.vorname = rs.getString("vorname");
         this.gebdat = rs.getDate("geburtsdatum").toLocalDate();
@@ -36,8 +37,8 @@ public class DataPerson extends DataAccessObject {
 
         // Use DataManager to load related objects
         DataManager dm = DataManager.getInstance();
-        this.gender = dm.loadById(genderId, DataGender.class);
-        this.adresse = dm.loadById(adresseId, DataAdresse.class);
+        this.gender = dm.loadById(genderId, Gender.class);
+        this.adresse = dm.loadById(adresseId, Adresse.class);
     }
 
 	/**
@@ -48,7 +49,7 @@ public class DataPerson extends DataAccessObject {
 	 * @param vorname
 	 * @param gebdat
 	 */
-	public DataPerson(String name, String vorname, LocalDate gebdat) {
+	public Person(String name, String vorname, LocalDate gebdat) {
 		this(name, vorname, gebdat, null, null);
 	}
 	/**
@@ -59,7 +60,7 @@ public class DataPerson extends DataAccessObject {
 	 * @param gender
 	 * @param adresse
 	 */
-	public DataPerson(String name, String vorname, LocalDate gebdat, DataGender gender, DataAdresse adresse) {
+	public Person(String name, String vorname, LocalDate gebdat, Gender gender, Adresse adresse) {
 		super();
 		this.name = name;
 		this.vorname = vorname;
@@ -98,19 +99,19 @@ public class DataPerson extends DataAccessObject {
 		this.gebdat = gebdat;
 	}
 
-	public DataGender getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 
-	public void setGender(DataGender gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 
-	public DataAdresse getAdresse() {
+	public Adresse getAdresse() {
 		return adresse;
 	}
 
-	public void setAdresse(DataAdresse adresse) {
+	public void setAdresse(Adresse adresse) {
 		this.adresse = adresse;
 	}
 

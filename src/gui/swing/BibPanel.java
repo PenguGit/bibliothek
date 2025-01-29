@@ -15,5 +15,5 @@ public class BibPanel extends JPanel implements GUIConstants {
 	public BibPanel(FlowLayout flowLayout) {
 		super(flowLayout);
 	}
-
+	
 }

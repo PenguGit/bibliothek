@@ -5,13 +5,13 @@ import java.time.LocalDate;
 /**
  * Repräsentiert die Entität Person
  */
-public class Person extends DataTransferObject {
+public class BLPerson extends DataTransferObject {
 
 	private String name;
 	private String vorname;
 	private LocalDate gebdat;
-	private Gender gender;
-	private Adresse adresse;
+	private BLGender gender;
+	private BLAdresse adresse;
 	
 	/**
 	 * Konstruiert eine Instanz der Klasse und
@@ -21,7 +21,7 @@ public class Person extends DataTransferObject {
 	 * @param vorname
 	 * @param gebdat
 	 */
-	public Person(String name, String vorname, LocalDate gebdat) {
+	public BLPerson(String name, String vorname, LocalDate gebdat) {
 		this(name, vorname, gebdat, null, null);
 	}
 	/**
@@ -32,13 +32,17 @@ public class Person extends DataTransferObject {
 	 * @param gender
 	 * @param adresse
 	 */
-	public Person(String name, String vorname, LocalDate gebdat, Gender gender, Adresse adresse) {
+	public BLPerson(String name, String vorname, LocalDate gebdat, BLGender gender, BLAdresse adresse) {
 		super();
 		this.name = name;
 		this.vorname = vorname;
 		this.gebdat = gebdat;
 		this.gender = gender;
 		this.adresse = adresse;
+	}
+	
+	public BLPerson() {
+		super();
 	}
 	
 	public String getName() {
@@ -65,19 +69,19 @@ public class Person extends DataTransferObject {
 		this.gebdat = gebdat;
 	}
 
-	public Gender getGender() {
+	public BLGender getGender() {
 		return gender;
 	}
 
-	public void setGender(Gender gender) {
+	public void setGender(BLGender gender) {
 		this.gender = gender;
 	}
 
-	public Adresse getAdresse() {
+	public BLAdresse getAdresse() {
 		return adresse;
 	}
 
-	public void setAdresse(Adresse adresse) {
+	public void setAdresse(BLAdresse adresse) {
 		this.adresse = adresse;
 	}
 

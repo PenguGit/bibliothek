@@ -2,11 +2,9 @@ package gui.swing;
 
 import javax.swing.JRadioButton;
 
-import bl.Gender;
+import bl.BLGender;
 
 public class BibRadioButton extends JRadioButton implements GUIConstants {
-	
-	Gender gen;
 	
 	public BibRadioButton() {
 		super();
@@ -18,9 +16,4 @@ public class BibRadioButton extends JRadioButton implements GUIConstants {
 		setText(string);
 	}
 
-	public BibRadioButton(Gender g) {
-		this(g.getKuerzel());
-		gen = g;
-	}
-	
 }

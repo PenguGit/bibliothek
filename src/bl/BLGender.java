@@ -3,7 +3,7 @@ package bl;
 /**
  * Beschreibt die Tabelle Gender
  */
-public class Gender extends DataTransferObject {
+public class BLGender extends DataTransferObject {
 
 	private String kuerzel;
 	private String info;
@@ -14,7 +14,7 @@ public class Gender extends DataTransferObject {
 	 * @param kuerzel
 	 * @param info
 	 */
-	public Gender(String kuerzel, String info) {
+	public BLGender(String kuerzel, String info) {
 		super();
 		this.kuerzel = kuerzel;
 		this.info = info;
@@ -27,7 +27,7 @@ public class Gender extends DataTransferObject {
 	 * @param kuerzel
 	 * @param info
 	 */
-	public Gender(int id, String kuerzel, String info) {
+	public BLGender(int id, String kuerzel, String info) {
 		super();
 		this.id = id;
 		this.kuerzel = kuerzel;

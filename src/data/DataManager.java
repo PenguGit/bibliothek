@@ -10,11 +10,11 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import bl.Person;
+import bl.BLPerson;
 import data.entities.DataAccessObject;
-import data.entities.DataAdresse;
-import data.entities.DataGender;
-import data.entities.DataPerson;
+import data.entities.Adresse;
+import data.entities.Gender;
+import data.entities.Person;
 
 /**
  * Class that manages the Data of the DB
@@ -85,7 +85,7 @@ public class DataManager implements Constants {
 		return null;
 	}
 
-	public String savePerson(DataPerson person) {
+	public String savePerson(Person person) {
 		String err;
 		err = save(person.getAdresse());
 		if (err != null) {
@@ -129,16 +129,16 @@ public class DataManager implements Constants {
 	 * Read out all entries in the table Gender and save them
 	 * @return an ArrayList of all items in the Table gender
 	 */
-	public ArrayList<DataGender> getAllGenders() {
+	public ArrayList<Gender> getAllGenders() {
 		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from gender");
-			ArrayList<DataGender> genderList = new ArrayList<>();
+			ArrayList<Gender> genderList = new ArrayList<>();
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String name = rs.getString("info");
 				String name2 = rs.getString("kuerzel");
-				genderList.add(new DataGender(id, name2, name));
+				genderList.add(new Gender(id, name2, name));
 			}
 			return genderList;
 		} catch (SQLException e) {
@@ -151,18 +151,18 @@ public class DataManager implements Constants {
 	 * Read out all entries in the table Adressen and save them
 	 * @return an ArrayList of all items in the Table Adressen
 	 */
-	public ArrayList<DataAdresse> getAllAdressen() {
+	public ArrayList<Adresse> getAllAdressen() {
 		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from adresse");
-			ArrayList<DataAdresse> adressList = new ArrayList<>();
+			ArrayList<Adresse> adressList = new ArrayList<>();
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				int plz = rs.getInt("plz");
 				String str = rs.getString("strasse");
 				String hausnr = rs.getString("hausnr");
 				String stadt = rs.getString("stadt");
-				adressList.add(new DataAdresse(id, plz, stadt, str, hausnr));
+				adressList.add(new Adresse(id, plz, stadt, str, hausnr));
 			}
 			return adressList;
 		} catch (SQLException e) {
@@ -205,15 +205,15 @@ public class DataManager implements Constants {
 	 * @param id
 	 * @return
 	 */
-	public DataGender loadGenderbyID(int id) {
+	public Gender loadGenderbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from gender where id = " + id);
-			DataGender g = null;
+			Gender g = null;
 			if (rs.next()) {
 				String name = rs.getString("kuerzel");
 				String name2 = rs.getString("info");
-				g = new DataGender(name, name2);
+				g = new Gender(name, name2);
 			}
 			return g;
 		} catch (SQLException e) {
@@ -227,17 +227,17 @@ public class DataManager implements Constants {
 	 * @param id
 	 * @return
 	 */
-	public DataAdresse loadAdressebyID(int id) {
+	public Adresse loadAdressebyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from adresse where id = " + id);
-			DataAdresse adr = null;
+			Adresse adr = null;
 			if (rs.next()) {
 				int plz = rs.getInt("plz");
 				String str = rs.getString("strasse");
 				String hausnr = rs.getString("hausnr");
 				String stadt = rs.getString("stadt");
-				adr = new DataAdresse(id, plz, stadt, str, hausnr);
+				adr = new Adresse(id, plz, stadt, str, hausnr);
 			}
 			return adr;
 		} catch (SQLException e) {
@@ -250,13 +250,13 @@ public class DataManager implements Constants {
 	 * @param id
 	 * @return
 	 */
-	public DataPerson loadPersonbyID(int id) {
+	public Person loadPersonbyID(int id) {
 		try {
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from person where id = " + id);
-			DataGender g = null;
-			DataAdresse adr = null;
-			DataPerson pers = null;
+			Gender g = null;
+			Adresse adr = null;
+			Person pers = null;
 			if (rs.next()) {
 				LocalDate gebdat = rs.getDate("geburtsdatum").toLocalDate();
 				String name = rs.getString("name");
@@ -265,7 +265,7 @@ public class DataManager implements Constants {
 				int gender_id = rs.getInt("gender_id");
 				g = loadGenderbyID(gender_id);
 				adr = loadAdressebyID(adresse_id);
-				pers = new DataPerson(name, vname, gebdat, g, adr);
+				pers = new Person(name, vname, gebdat, g, adr);
 				pers.setId(id);
 			}
 			return pers;
@@ -349,9 +349,18 @@ public class DataManager implements Constants {
 		return null;
 	}
 
-	public ArrayList<DataPerson> getAllPerson() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Person> getAllPerson() {
+		try {
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from person");
+			ArrayList<Person> personList = new ArrayList<>();
+			while (rs.next()) {
+				personList.add(new Person(rs));
+			}
+			return personList;
+		} catch (SQLException e) {
+			return null;
+		}
 	}
 
 }

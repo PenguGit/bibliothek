@@ -12,6 +12,7 @@ public interface GUIConstants {
 
 	// Hintergrundfarben
 	public static final Color COLOR_PANEL = Color.WHITE;
+	public static final Color COLOR_LABEL_PERSON = Color.WHITE;
 
 	// Allgemeingültige Konstanten
 	public static final Font FONT_TAB = new Font("Comic Sans MS", Font.PLAIN, 20);
@@ -25,5 +26,4 @@ public interface GUIConstants {
 	public static final String LABEL_GEBURTSDATUM = "Geburtsdatum";
 	public static final String NAME = "Name";
 	public static final String VORNAME = "Vorname";
-	
 }
