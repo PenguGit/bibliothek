@@ -37,6 +37,10 @@ public class BLAdresse extends DataTransferObject{
 		this.hausnr = haus;
 	}
 
+	public BLAdresse() {
+		super();
+	}
+
 	public int getPlz() {
 		return plz;
 	}

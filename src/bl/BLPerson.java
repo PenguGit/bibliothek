@@ -26,6 +26,25 @@ public class BLPerson extends DataTransferObject {
 	}
 	/**
 	 * 
+	 * @param id 
+	 * @param name
+	 * @param vorname
+	 * @param gebdat
+	 * @param gender
+	 * @param adresse
+	 */
+	public BLPerson(int id, String name, String vorname, LocalDate gebdat, BLGender gender, BLAdresse adresse) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.vorname = vorname;
+		this.gebdat = gebdat;
+		this.gender = gender;
+		this.adresse = adresse;
+	}
+	
+	/**
+	 * 
 	 * @param name
 	 * @param vorname
 	 * @param gebdat

@@ -13,7 +13,7 @@ import data.DataManager;
 public class Person extends DataAccessObject {
 
 	private final String SQL_INSERT = "INSERT INTO Person (geburtsdatum, name, vorname,  Adresse_id, Gender_id) VALUES('%s', '%s', '%s', '%s', '%s')";
-	private final String SQL_UPDATE = "UPDATE Person set geburtsdatum = '%s', name = '%s', vorname = '%s', Adresse_id = '%s', Gender_id = '%s' WHERE id = %d;";
+	private final String SQL_UPDATE = "UPDATE Person set geburtsdatum = '%s', name = '%s', vorname = '%s', Adresse_id = %d, Gender_id = %d WHERE id = %d;";
 	
 	private String name;
 	private String vorname;
@@ -69,9 +69,27 @@ public class Person extends DataAccessObject {
 		this.adresse = adresse;
 	}
 	
+	/**
+	 * 
+	 * @param name
+	 * @param vorname
+	 * @param gebdat
+	 * @param gender
+	 * @param adresse
+	 */
+	public Person(int id, String name, String vorname, LocalDate gebdat, Gender gender, Adresse adresse) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.vorname = vorname;
+		this.gebdat = gebdat;
+		this.gender = gender;
+		this.adresse = adresse;
+	}
+	
 	@Override
 	public String getSqlString() {
-		return id > 0 ? SQL_UPDATE.formatted(Date.valueOf(gebdat).toString(), name, vorname, adresse.getId(), gender.getId()) : SQL_INSERT.formatted(Date.valueOf(gebdat).toString(), name, vorname, adresse.getId(), gender.getId());
+		return id > 0 ? SQL_UPDATE.formatted(Date.valueOf(gebdat).toString(), name, vorname, adresse.getId(), gender.getId(), id) : SQL_INSERT.formatted(Date.valueOf(gebdat).toString(), name, vorname, adresse.getId(), gender.getId());
 	}
 
 	

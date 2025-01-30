@@ -22,7 +22,7 @@ import javax.swing.event.ListSelectionListener;
 import bl.BLAdresse;
 import bl.BLGender;
 import bl.BLPerson;
-import bl.BLPersonFormular;
+import bl.DTOManagerNew;
 import bl.DTOManager;
 import bl.ListData;
 
@@ -33,7 +33,7 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 	LocalDate gebdat = LocalDate.EPOCH;
 	DTOManager dtoMan;
 	GridBagConstraints gbc;
-	BLPersonFormular pers;
+	BLPerson pers;
 	ButtonGroup genderGroup;
 	
 	/**
@@ -175,17 +175,38 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 	}
 	
 	private void save() {
-		pers = new BLPersonFormular(
-				txtName.getText(),
-				txtVorname.getText(),
-				gebdat,
-				getGenderFromRadio().getId(),
+		if (pers != null) {
+			BLAdresse adr = pers.getAdresse();
+			if(adr == null) {
+				adr = new BLAdresse();
+			}
+			adr.setPlz(Integer.valueOf(txtPLZ.getText()));
+			adr.setStadt(txtStadt.getText());
+			adr.setStrasse(txtStrasse.getText());	
+			adr.setHaus(txtHausnummer.getText());
+			
+			pers.setName(txtName.getText());
+			pers.setVorname(txtVorname.getText());
+			pers.setGender(getGenderFromRadio());
+			pers.setAdresse(adr);
+			dtoMan.savePerson(pers);
+			System.out.println("Updated");
+			return;
+		}
+		
+		BLAdresse adr = new BLAdresse(
 				Integer.valueOf(txtPLZ.getText()),
 				txtStadt.getText(),
 				txtStrasse.getText(),
 				txtHausnummer.getText());
+		pers = new BLPerson(
+				txtName.getText(),
+				txtVorname.getText(),
+				gebdat,
+				getGenderFromRadio(),
+				adr);
 		
-		if(pers.getGender_id()!= 0) {
+		if(pers.getGender()!= null) {
 			dtoMan.savePerson(pers);
 			System.out.println("Success");
 		} else {
@@ -210,9 +231,9 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 	/**
 	 * @return
 	 */
-	private void setRadioFromGender(int g_id) {
+	private void setRadioFromGender(BLGender g) {
 		for (BibPersonRadioButton rb : rbList) {
-			if (rb.gen.getId() == g_id) {
+			if (rb.gen.getId() == g.getId()) {
 				rb.setSelected(true);
 				//Alternative to above line
 				//genderGroup.setSelected(rb.getModel(), true);
@@ -224,11 +245,11 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 		txtName.setText(pers.getName());
 		txtVorname.setText(pers.getVorname());
 		txtGeburtsdatum.setText(pers.getGebdat().toString());
-		txtPLZ.setText(pers.getPlz() +"");
-		txtStadt.setText(pers.getStadt());
-		txtStrasse.setText(pers.getStrasse());
-		txtHausnummer.setText(pers.getHausnr());
-		setRadioFromGender(pers.getGender_id());
+		txtPLZ.setText(pers.getAdresse().getPlz() +"");
+		txtStadt.setText(pers.getAdresse().getStadt());
+		txtStrasse.setText(pers.getAdresse().getStrasse());
+		txtHausnummer.setText(pers.getAdresse().getHaus());
+		setRadioFromGender(pers.getGender());
 	}
 
 	@Override

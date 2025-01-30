@@ -95,13 +95,14 @@ public class DTOManager {
 	 * 
 	 * @return
 	 */
-	public BLPersonFormular loadByIDPerson(int id) {
+	public BLPerson loadByIDPerson(int id) {
 		Person p = DataManager.getInstance().loadById(id, Person.class);
 		if (p != null) {
 			Adresse adr = p.getAdresse();
 			Gender g = p.getGender();
-			BLPersonFormular blp = new BLPersonFormular(p.getName(), p.getVorname(), p.getGebdat(),g.getId(),adr.getPlz(), adr.getStadt(), adr.getStrasse(), adr.getHaus());
-			blp.id = p.getId();
+			BLGender blg = new BLGender(g.getId(),g.getKuerzel(),g.getInfo());
+			BLAdresse bladr = new BLAdresse(adr.getId(), adr.getPlz(), adr.getStadt(), adr.getStrasse(), adr.getHaus());
+			BLPerson blp = new BLPerson(p.getId(), p.getName(), p.getVorname(), p.getGebdat(),blg,bladr);
 			return blp;
 		}
 		return null;
@@ -143,10 +144,12 @@ public class DTOManager {
 	/**
 	 * Saves the Person based on the given DTO to the Database
 	 */
-	public String savePerson(BLPersonFormular dto) {
-		Gender dg = DataManager.getInstance().loadById(dto.getGender_id(), Gender.class);
-		Adresse dadr = new Adresse(dto.getPlz(), dto.getStadt(), dto.getStrasse(), dto.getHausnr());
-		Person dp = new Person(dto.getName(), dto.getVorname(), dto.getGebdat(),dg,dadr);
+	public String savePerson(BLPerson dto) {
+		BLAdresse adr = dto.getAdresse();
+		BLGender g = dto.getGender();
+		Gender dg = new Gender(g.getId(),g.getKuerzel(),g.getInfo());
+		Adresse dadr = new Adresse(adr.getId(), adr.getPlz(), adr.getStadt(), adr.getStrasse(), adr.getHaus());
+		Person dp = new Person(dto.getId(), dto.getName(), dto.getVorname(), dto.getGebdat(),dg,dadr);
 		String err = DataManager.getInstance().savePerson(dp);
 		if (err != null) {
 			return err;

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class Adresse extends DataAccessObject{
  
 	private final String SQL_INSERT = "INSERT INTO ADRESSE (plz, stadt, strasse, hausnr) VALUES(%d, '%s', '%s', '%s')";
-	//private final String SQL_UPDATE = "UPDATE adresse set plz = %d, stadt = '%s', strasse = '%s', hausnr = '%s' WHERE id = %d;";
+	private final String SQL_UPDATE = "UPDATE adresse set plz = %d, stadt = '%s', strasse = '%s', hausnr = '%s' WHERE id = %d;";
 	
 	private int plz;
 	private String stadt;
@@ -60,7 +60,7 @@ public class Adresse extends DataAccessObject{
 	@Override
 	public String getSqlString() {
 		if (id > 0) {
-			return SQL_INSERT.formatted(plz, stadt, strasse, hausnr, id);
+			return SQL_UPDATE.formatted(plz, stadt, strasse, hausnr, id);
 		} else {
 			return SQL_INSERT.formatted(plz, stadt, strasse, hausnr);
 		}
