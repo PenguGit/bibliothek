@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.Gender;
+import data.pengugit.entities.Gender;
 
 class TestGender {
 	static final String SQL_QUERY = "SELECT * FROM GENDER";

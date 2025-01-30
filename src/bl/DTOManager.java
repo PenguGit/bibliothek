@@ -3,9 +3,9 @@ package bl;
 import java.util.ArrayList;
 
 import data.DataManager;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.pengugit.entities.Adresse;
+import data.pengugit.entities.Gender;
+import data.pengugit.entities.Person;
 
 public class DTOManager {
 

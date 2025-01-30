@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
 import data.fake.FakeDataGeneration;
+import data.pengugit.entities.Adresse;
+import data.pengugit.entities.Gender;
+import data.pengugit.entities.Person;
 
 class TestLoadAllGender {
 	static final String SQL_QUERY = "SELECT * FROM GENDER";

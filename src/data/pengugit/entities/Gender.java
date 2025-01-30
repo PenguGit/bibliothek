@@ -1,4 +1,4 @@
-package data.entities;
+package data.pengugit.entities;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -3,9 +3,9 @@ package bl.util;
 import bl.BLAdresse;
 import bl.BLGender;
 import bl.BLPerson;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.pengugit.entities.Adresse;
+import data.pengugit.entities.Gender;
+import data.pengugit.entities.Person;
 
 public class DataObjectMapper {
 	public static BLPerson convertPersonToDTO(Person dao) {

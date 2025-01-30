@@ -1,6 +1,6 @@
 package data;
 
-public interface Constants {
+public interface DBConstants {
 	
 	// Fehlermeldungen SQL
 	public static final String ERROR_MYSQL_CONNECTION = "Fehler beim Verbinden mit der DB";

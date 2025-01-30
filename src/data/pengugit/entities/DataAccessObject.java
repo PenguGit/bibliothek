@@ -1,4 +1,4 @@
-package data.entities;
+package data.pengugit.entities;
 
 /**
  * Mutterklasse aller Entitätsklassen

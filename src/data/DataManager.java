@@ -11,15 +11,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import bl.BLPerson;
-import data.entities.DataAccessObject;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.pengugit.entities.Adresse;
+import data.pengugit.entities.DataAccessObject;
+import data.pengugit.entities.Gender;
+import data.pengugit.entities.Person;
 
 /**
  * Class that manages the Data of the DB
  */
-public class DataManager implements Constants {
+public class DataManager implements DBConstants {
 	
 	/**
 	 * Connection Constants for the DB
@@ -85,6 +85,11 @@ public class DataManager implements Constants {
 		return null;
 	}
 
+	/**
+	 * Method so that person gets saved after Address has been saved
+	 * @param person
+	 * @return
+	 */
 	public String savePerson(Person person) {
 		String err;
 		err = save(person.getAdresse());
@@ -349,6 +354,10 @@ public class DataManager implements Constants {
 		return null;
 	}
 
+	/**
+	 * Method to load all People from the Person Table into an Array 
+	 * @return ArrayList with Person data in it
+	 */
 	public ArrayList<Person> getAllPerson() {
 		try {
 			Statement stmt = connection.createStatement();

@@ -6,9 +6,9 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import data.DataManager;
-import data.entities.Adresse;
-import data.entities.Gender;
-import data.entities.Person;
+import data.pengugit.entities.Adresse;
+import data.pengugit.entities.Gender;
+import data.pengugit.entities.Person;
 
 public class FakeDataGeneration {
 	static final String DELETE_ALL = "delete from %s;";

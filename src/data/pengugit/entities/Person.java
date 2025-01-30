@@ -1,4 +1,4 @@
-package data.entities;
+package data.pengugit.entities;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -53,7 +53,7 @@ public class Person extends DataAccessObject {
 		this(name, vorname, gebdat, null, null);
 	}
 	/**
-	 * 
+	 * Konstruiert eine Person ohne ID
 	 * @param name
 	 * @param vorname
 	 * @param gebdat
@@ -69,8 +69,10 @@ public class Person extends DataAccessObject {
 		this.adresse = adresse;
 	}
 	
+	
 	/**
-	 * 
+	 * Konstruiert eine Person mit ID
+	 * @param id
 	 * @param name
 	 * @param vorname
 	 * @param gebdat

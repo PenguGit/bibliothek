@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import data.DataManager;
-import data.entities.Gender;
+import data.pengugit.entities.Gender;
 
 class TestGenderTest {
 	static final String DELETE_ALL_GENDER = "delete from gender;";

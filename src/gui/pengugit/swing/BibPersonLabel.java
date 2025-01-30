@@ -1,4 +1,4 @@
-package gui.swing;
+package gui.pengugit.swing;
 
 public class BibPersonLabel extends BibLabel implements GUIConstants {
 

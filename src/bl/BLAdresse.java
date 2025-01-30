@@ -5,6 +5,9 @@ package bl;
  * Die Felder der Klasse entsprechen den Attributen der Entität (Spalten).
  * Einer Instanz der Klasse entspricht ein Datensatz in der DB-Tabelle.
  */
+/**
+ * 
+ */
 public class BLAdresse extends DataTransferObject{
  
 	private int plz;

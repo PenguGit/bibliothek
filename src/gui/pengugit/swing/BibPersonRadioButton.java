@@ -1,4 +1,4 @@
-package gui.swing;
+package gui.pengugit.swing;
 
 import bl.BLGender;
 
@@ -14,6 +14,7 @@ public class BibPersonRadioButton extends BibRadioButton implements GUIConstants
 	public BibPersonRadioButton(BLGender g) {
 		super(g.getKuerzel());
 		setForeground(COLOR_LABEL_PERSON);
+		setToolTipText(g.getInfo());
 		gen = g;
 	}
 }

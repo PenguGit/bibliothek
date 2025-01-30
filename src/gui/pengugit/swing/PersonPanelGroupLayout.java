@@ -1,4 +1,4 @@
-package gui.swing;
+package gui.pengugit.swing;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
