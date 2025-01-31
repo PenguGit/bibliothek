@@ -73,12 +73,11 @@ public class DataManager implements DBConstants {
 	 * @param id
 	 * @return
 	 */
-	public String deleteFormByID(int id, String s) {
+	public String deletePersonByID(int id, String s) {
 		try {
 			Statement stmt = connection.createStatement();
-			String sql = "delete from %s where id = " + id;
-			sql.formatted(s);
-			stmt.execute(sql);
+			String sql = "delete from %s where id = " + id + ";";
+			stmt.execute(sql.formatted(s));
 		} catch (SQLException e) {
 			return e.getMessage();
 		}

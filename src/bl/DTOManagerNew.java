@@ -32,7 +32,7 @@ public class DTOManagerNew {
 	 * @return
 	 */
 	public String deleteGender(BLGender dto) {
-		String err = DataManager.getInstance().deleteFormByID(dto.getId(), "gender");
+		String err = DataManager.getInstance().deletePersonByID(dto.getId(), "gender");
 		if (err == null) {
 			dto.setId(0);
 		}
@@ -73,7 +73,7 @@ public class DTOManagerNew {
 	 * @return
 	 */
 	public String deleteAdresse(BLAdresse dto) {
-		String err = DataManager.getInstance().deleteFormByID(dto.getId(), "adresse");
+		String err = DataManager.getInstance().deletePersonByID(dto.getId(), "adresse");
 		if (err == null) {
 			dto.setId(0);
 		}
@@ -132,7 +132,7 @@ public class DTOManagerNew {
 	 * @return
 	 */
 	public String deletePerson(BLPerson dto) {
-		String err = DataManager.getInstance().deleteFormByID(dto.getId(), "gender");
+		String err = DataManager.getInstance().deletePersonByID(dto.getId(), "gender");
 		
 		if (err == null) {
 			dto.setId(0);

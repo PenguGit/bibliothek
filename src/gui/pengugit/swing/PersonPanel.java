@@ -32,6 +32,7 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 
     private static final String COMMAND_SAVE = "Save";
 	private static final String COMMAND_CLEAR = "Clear";
+	private static final String COMMAND_DELETE = "Del";
 
     DTOManager dtoMan;
     GridBagConstraints gbc;
@@ -113,7 +114,9 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
     	outputArea.setAlignmentX(CENTER_ALIGNMENT);
     	outputArea.setEditable(false);
     	outputArea.setFocusable(false);
+    	gbc.gridheight = 2;
     	addComponent(outputArea, 8, 0, 0.8);
+    	gbc.gridheight = 1;
     	
         BibPersonLabel lblName = new BibPersonLabel("Name");
         txtName = new BibTextField(10);
@@ -177,6 +180,7 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 
         BibButton btnSpeichern = new BibButton("Speichern");
         BibButton btnClear = new BibButton("Clear");
+        BibButton btnDel = new BibButton("Löschen");
         
         
         btnSpeichern.setActionCommand(COMMAND_SAVE);
@@ -188,16 +192,25 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         btnClear.addActionListener(this);
         btnClear.setBackground(Color.BLUE);
         btnClear.setForeground(Color.WHITE);
+        
+        btnDel.setActionCommand(COMMAND_DELETE);
+        btnDel.addActionListener(this);
+        btnDel.setBackground(Color.RED);
+        btnDel.setForeground(Color.WHITE);
+        
         gbc.anchor = GridBagConstraints.CENTER;
-        addComponent(btnSpeichern, 8, 2, 0.8);
-        addComponent(btnClear, 8, 1, 0.8);
+        addComponent(btnSpeichern, 9, 2, 0.8);
+        addComponent(btnClear, 8, 2, 0.8);
+        addComponent(btnDel, 9, 1, 0.8);
         
     }
+    
+    
     
     /**
 	 * Refreshes the JList after extracting the Model and reloading it
 	 */
-	void refreshList() {
+	private void refreshList() {
 		DefaultListModel<ListData> m = (DefaultListModel<ListData>) list.getModel();
 		m.clear();
 		data = dtoMan.loadAllPerson();
@@ -218,7 +231,21 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         gbc.weightx = weightx;
         add(component, gbc);
     }
+    
+    private void delete() {
 
+		if (pers != null && pers.getId() > 0) {
+			String err = dtoMan.deletePerson(pers);
+			if (err != null) {
+				outputArea.showError(err);
+			} else {
+				outputArea.showMessage("Gelöscht");
+			}
+			refreshList();
+			clearForm();
+		}
+	}
+    
     /**
      * Saves the person data to the database.  Either updates an existing
      * person or creates a new one.
@@ -264,6 +291,11 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 				txtGeburtsdatum.getDate(),
 				getGenderFromRadio(),
 				adr);
+		if(pers.getGebdat() == null) {
+			outputArea.showError("Kein Valides\nGeburtsdatum");
+			txtGeburtsdatum.setFilled(false);
+			return;
+		}
 		err = dtoMan.savePerson(pers);
 		if (err != null) {
 			outputArea.showError(err);
@@ -311,6 +343,7 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         txtName.setText(pers.getName());
         txtVorname.setText(pers.getVorname());
         txtGeburtsdatum.setDate(pers.getGebdat());
+        txtGeburtsdatum.changeStatus(false);;
         txtPLZ.setText(pers.getAdresse().getPlz() + "");
         txtStadt.setText(pers.getAdresse().getStadt());
         txtStrasse.setText(pers.getAdresse().getStrasse());
@@ -320,6 +353,43 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         outputArea.showMessage("Person geladen");
     }
 
+    /**
+     * Clears all input fields in the person form. And sets person to null.
+     */
+    private void clearForm() {
+        txtName.setText("");
+        txtVorname.setText("");
+        txtGeburtsdatum.changeStatus(true);
+        txtGeburtsdatum.setText("");
+        txtPLZ.setText("");
+        txtStadt.setText("");
+        txtStrasse.setText("");
+        txtHausnummer.setText("");
+        genderGroup.clearSelection();
+        pers = null;
+    }
+    
+
+    /**
+     * Validates that all required input fields are filled.  Gives a red border
+     * to the fields that are not filled.
+     *
+     * @return {@code true} if all fields are filled, {@code false} otherwise.
+     */
+    public boolean validateFields() {
+        boolean isValid = true;
+
+        isValid &= txtName.isFilled();
+        isValid &= txtVorname.isFilled();
+        isValid &= txtGeburtsdatum.isFilled();
+        isValid &= txtPLZ.isFilled();
+        isValid &= txtStadt.isFilled();
+        isValid &= txtStrasse.isFilled();
+        isValid &= txtHausnummer.isFilled();
+
+        return isValid;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -327,6 +397,8 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
             save();
         } else if (e.getActionCommand().equals(COMMAND_CLEAR)){
         	clearForm();
+        } else if (e.getActionCommand().equals(COMMAND_DELETE)){
+        	delete();
         }
 
     }
@@ -349,85 +421,5 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         }
     }
     
-    /**
-     * Clears all input fields in the person form. And sets person to null.
-     */
-    private void clearForm() {
-        txtName.setText("");
-        txtVorname.setText("");
-        txtGeburtsdatum.setText("");
-        txtPLZ.setText("");
-        txtStadt.setText("");
-        txtStrasse.setText("");
-        txtHausnummer.setText("");
-        genderGroup.clearSelection();
-        pers = null;
-    }
-    
-    /**
-     * Validates that all required input fields are filled.  Displays error
-     * messages in the output area if any fields are missing.
-     *
-     * @return {@code true} if all fields are filled, {@code false} otherwise.
-     */
-//    public boolean validateFields() {
-//        if (txtName.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Name' aus.");
-//            return false;
-//        }
-//
-//        if (txtVorname.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Vorname' aus.");
-//            return false;
-//        }
-//
-//        if (txtGeburtsdatum.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Geburtsdatum' aus.");
-//            return false;
-//        }
-//
-//        if (txtPLZ.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'PLZ' aus.");
-//            return false;
-//        }
-//
-//        if (txtStadt.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Stadt' aus.");
-//            return false;
-//        }
-//
-//        if (txtStrasse.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Straße' aus.");
-//            return false;
-//        }
-//
-//        if (txtHausnummer.getText().isEmpty()) {
-//            outputArea.showError("Bitte füllen Sie das Feld 'Hausnummer' aus.");
-//            return false;
-//        }
-//
-//        return true;
-//    }
-    
-    /**
-     * Validates that all required input fields are filled.  Gives a red border
-     * to the fields that are not filled.
-     *
-     * @return {@code true} if all fields are filled, {@code false} otherwise.
-     */
-    public boolean validateFields() {
-        boolean isValid = true;
-
-        isValid &= txtName.isFilled();
-        isValid &= txtVorname.isFilled();
-        isValid &= txtGeburtsdatum.isFilled();
-        isValid &= txtPLZ.isFilled();
-        isValid &= txtStadt.isFilled();
-        isValid &= txtStrasse.isFilled();
-        isValid &= txtHausnummer.isFilled();
-
-        return isValid;
-    }
-
 
 }
