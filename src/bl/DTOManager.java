@@ -151,6 +151,8 @@ public class DTOManager {
 		Adresse dadr = new Adresse(adr.getId(), adr.getPlz(), adr.getStadt(), adr.getStrasse(), adr.getHaus());
 		Person dp = new Person(dto.getId(), dto.getName(), dto.getVorname(), dto.getGebdat(),dg,dadr);
 		String err = DataManager.getInstance().savePerson(dp);
+		
+		dto.setId(dp.getId());
 		if (err != null) {
 			return err;
 		}

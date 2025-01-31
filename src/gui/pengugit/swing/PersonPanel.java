@@ -8,7 +8,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -32,12 +31,13 @@ import bl.ListData;
 public class PersonPanel extends BibPanel implements ActionListener, ListSelectionListener {
 
     private static final String COMMAND_SAVE = "Save";
+	private static final String COMMAND_CLEAR = "Clear";
 
-    LocalDate gebdat = LocalDate.EPOCH;
     DTOManager dtoMan;
     GridBagConstraints gbc;
     BLPerson pers;
     ButtonGroup genderGroup;
+    BibMessageArea outputArea;
 
     /**
      * List of Data in the JList
@@ -48,7 +48,8 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      */
     ArrayList<ListData> data;
     ArrayList<BibPersonRadioButton> rbList;
-
+    
+    
     private BibTextField txtName;
     private BibTextField txtVorname;
     private BibBirthdateTextField txtGeburtsdatum;
@@ -61,7 +62,7 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      * Builds everything
      */
     public PersonPanel() {
-        dtoMan = new DTOManager();
+    	dtoMan = new DTOManager();
 
         setLayout(new GridBagLayout());
         setBackground(Color.DARK_GRAY);
@@ -105,7 +106,15 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      * Initializes the output components (text fields and labels) for displaying person details.
      */
     void initOutput() {
-
+    	
+    	outputArea = new BibMessageArea();
+    	
+    	outputArea.setBackground(getBackground());
+    	outputArea.setAlignmentX(CENTER_ALIGNMENT);
+    	outputArea.setEditable(false);
+    	outputArea.setFocusable(false);
+    	addComponent(outputArea, 8, 0, 0.8);
+    	
         BibPersonLabel lblName = new BibPersonLabel("Name");
         txtName = new BibTextField(10);
         addComponent(lblName, 0, 1, 0.2);
@@ -140,6 +149,9 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         txtHausnummer = new BibTextField(10);
         addComponent(lblHausnummer, 6, 1, 0.2);
         addComponent(txtHausnummer, 6, 2, 0.8);
+        
+        
+        
     }
 
     /**
@@ -147,11 +159,11 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      */
     void initInput() {
         genderGroup = new ButtonGroup();
-        BibPanel genderPanel = new BibPanel(new FlowLayout(FlowLayout.LEFT, 1, 0)); // 5px horizontal gap, 0px vertical
+        BibPanel genderPanel = new BibPanel(new FlowLayout(FlowLayout.LEFT, 1, 0)); 
         ArrayList<BLGender> gList = dtoMan.loadAllGender();
         rbList = new ArrayList<>();
 
-        genderPanel.setBackground(Color.DARK_GRAY); // Match the background color
+        genderPanel.setBackground(Color.DARK_GRAY);
         for (BLGender g : gList) {
             BibPersonRadioButton rbG = new BibPersonRadioButton(g);
             rbG.setBackground(getBackground());
@@ -164,14 +176,33 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         addComponent(genderPanel, 7, 2, 0.8);
 
         BibButton btnSpeichern = new BibButton("Speichern");
-
+        BibButton btnClear = new BibButton("Clear");
+        
+        
         btnSpeichern.setActionCommand(COMMAND_SAVE);
         btnSpeichern.addActionListener(this);
         btnSpeichern.setBackground(Color.GREEN);
         btnSpeichern.setForeground(Color.WHITE);
+        
+        btnClear.setActionCommand(COMMAND_CLEAR);
+        btnClear.addActionListener(this);
+        btnClear.setBackground(Color.BLUE);
+        btnClear.setForeground(Color.WHITE);
         gbc.anchor = GridBagConstraints.CENTER;
         addComponent(btnSpeichern, 8, 2, 0.8);
+        addComponent(btnClear, 8, 1, 0.8);
+        
     }
+    
+    /**
+	 * Refreshes the JList after extracting the Model and reloading it
+	 */
+	void refreshList() {
+		DefaultListModel<ListData> m = (DefaultListModel<ListData>) list.getModel();
+		m.clear();
+		data = dtoMan.loadAllPerson();
+		m.addAll(data);
+	}
 
     /**
      * Just add components with constraints
@@ -192,14 +223,18 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      * Saves the person data to the database.  Either updates an existing
      * person or creates a new one.
      */
-    //TODO ADD DATE CORRECTLY WITH FORMATTER!!!!!
 	private void save() {
+		String err;
+		if (!validateFields()) {
+			outputArea.showError("Bitte fülle alle\nPflichtfelder aus");
+			return;
+		}
 		if (pers != null) {
 			BLAdresse adr = pers.getAdresse();
 			if(adr == null) {
 				adr = new BLAdresse();
 			}
-			adr.setPlz(Integer.valueOf(txtPLZ.getText()));
+			adr.setPlz(txtPLZ.getInt());
 			adr.setStadt(txtStadt.getText());
 			adr.setStrasse(txtStrasse.getText());	
 			adr.setHaus(txtHausnummer.getText());
@@ -208,29 +243,33 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 			pers.setVorname(txtVorname.getText());
 			pers.setGender(getGenderFromRadio());
 			pers.setAdresse(adr);
-			dtoMan.savePerson(pers);
-			System.out.println("Updated");
+			
+			err = dtoMan.savePerson(pers);
+			if (err != null) {
+				outputArea.showError(err);
+			}
+			refreshList();
+			outputArea.showMessage("Updated");
 			return;
 		}
 		
 		BLAdresse adr = new BLAdresse(
-				Integer.valueOf(txtPLZ.getText()),
+				txtPLZ.getInt(),
 				txtStadt.getText(),
 				txtStrasse.getText(),
 				txtHausnummer.getText());
 		pers = new BLPerson(
 				txtName.getText(),
 				txtVorname.getText(),
-				gebdat,
+				txtGeburtsdatum.getDate(),
 				getGenderFromRadio(),
 				adr);
-		
-		if(pers.getGender()!= null) {
-			dtoMan.savePerson(pers);
-			System.out.println("Success");
-		} else {
-			System.out.println("Error no Gender Selected");
+		err = dtoMan.savePerson(pers);
+		if (err != null) {
+			outputArea.showError(err);
 		}
+		refreshList();
+		outputArea.showMessage("Saved");
 	}
 	
 	 /**
@@ -268,14 +307,17 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
      * Fills the input form fields with the details of the currently selected person.
      */
     private void fillForm() {
+    	
         txtName.setText(pers.getName());
         txtVorname.setText(pers.getVorname());
-        txtGeburtsdatum.setText(pers.getGebdat().toString());
+        txtGeburtsdatum.setDate(pers.getGebdat());
         txtPLZ.setText(pers.getAdresse().getPlz() + "");
         txtStadt.setText(pers.getAdresse().getStadt());
         txtStrasse.setText(pers.getAdresse().getStrasse());
         txtHausnummer.setText(pers.getAdresse().getHaus());
         setRadioFromGender(pers.getGender());
+        validateFields();
+        outputArea.showMessage("Person geladen");
     }
 
     @Override
@@ -283,8 +325,8 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
 
         if (e.getActionCommand().equals(COMMAND_SAVE)) {
             save();
-            clearForm();
-        } else {
+        } else if (e.getActionCommand().equals(COMMAND_CLEAR)){
+        	clearForm();
         }
 
     }
@@ -321,5 +363,71 @@ public class PersonPanel extends BibPanel implements ActionListener, ListSelecti
         genderGroup.clearSelection();
         pers = null;
     }
+    
+    /**
+     * Validates that all required input fields are filled.  Displays error
+     * messages in the output area if any fields are missing.
+     *
+     * @return {@code true} if all fields are filled, {@code false} otherwise.
+     */
+//    public boolean validateFields() {
+//        if (txtName.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Name' aus.");
+//            return false;
+//        }
+//
+//        if (txtVorname.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Vorname' aus.");
+//            return false;
+//        }
+//
+//        if (txtGeburtsdatum.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Geburtsdatum' aus.");
+//            return false;
+//        }
+//
+//        if (txtPLZ.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'PLZ' aus.");
+//            return false;
+//        }
+//
+//        if (txtStadt.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Stadt' aus.");
+//            return false;
+//        }
+//
+//        if (txtStrasse.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Straße' aus.");
+//            return false;
+//        }
+//
+//        if (txtHausnummer.getText().isEmpty()) {
+//            outputArea.showError("Bitte füllen Sie das Feld 'Hausnummer' aus.");
+//            return false;
+//        }
+//
+//        return true;
+//    }
+    
+    /**
+     * Validates that all required input fields are filled.  Gives a red border
+     * to the fields that are not filled.
+     *
+     * @return {@code true} if all fields are filled, {@code false} otherwise.
+     */
+    public boolean validateFields() {
+        boolean isValid = true;
+
+        isValid &= txtName.isFilled();
+        isValid &= txtVorname.isFilled();
+        isValid &= txtGeburtsdatum.isFilled();
+        isValid &= txtPLZ.isFilled();
+        isValid &= txtStadt.isFilled();
+        isValid &= txtStrasse.isFilled();
+        isValid &= txtHausnummer.isFilled();
+
+        return isValid;
+    }
+
 
 }

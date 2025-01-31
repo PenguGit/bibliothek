@@ -3,6 +3,9 @@ package gui.pengugit.swing;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class BibBirthdateTextField extends BibTextField {
 
@@ -35,5 +38,19 @@ public class BibBirthdateTextField extends BibTextField {
             }
         });
 	}
-
+	
+	public LocalDate getDate() {
+		try {
+			String strDate = getText();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+			return LocalDate.parse(strDate, formatter);
+		} catch (DateTimeParseException e) {
+			return null;
+		}
+	}
+	
+	public void setDate(LocalDate locDate) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		setText(locDate.format(formatter));
+	}
 }
